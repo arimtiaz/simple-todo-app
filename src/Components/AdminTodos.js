@@ -1,25 +1,42 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import CreateTodo from "./CreateTodo";
 import DisplayTodo from "./DisplayTodo";
 import EditNote from "./EditNote";
 import { v4 as uuidv4 } from "uuid";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
+import DetailedTodo from "./DetailedTodo";
 
 const AdminTodos = () => {
   const [allTasks, setAllTasks] = useState([]);
   const [task, setTask] = useState("");
   const [editing, setEditing] = useState(null);
-  const [characters, updateCharacters] = useState(allTasks);
+  const [taskDetails, setTaskDetails] = useState("")
+
+useEffect(() => {
+    const data = window.localStorage.getItem("allTasks");
+    console.log("Getting data from allTasks", data);
+    if (data) {
+      setAllTasks(JSON.parse(data));
+    } else {
+      setAllTasks([]);
+    }
+  }, []);
+
+  useEffect(() => {
+    window.localStorage.setItem("allTasks", JSON.stringify(allTasks));
+    console.log("Saving data from allTasks", allTasks);
+  }, [allTasks]);
+
 
   const addTask = () => {
-    if (task.trim() !== "") {
       const newTask = {
         id: uuidv4(),
         task: task,
+        taskDetails: taskDetails,
       };
       setAllTasks((prevTasks) => [...prevTasks, newTask]);
       setTask("");
-    }
+      setTaskDetails("")
   };
 
   const handleDelete = (id) => {
@@ -39,7 +56,7 @@ const AdminTodos = () => {
 
     setAllTasks(items);
   }
-  
+
   return (
     <div className="max-w-screen-lg mx-auto">
       {/* Header */}
@@ -55,7 +72,7 @@ const AdminTodos = () => {
       </div>
       {/* Create Todos */}
       <div className="w-3/4 mx-auto my-8">
-        <CreateTodo addTask={addTask} task={task} setTask={setTask} />
+        <CreateTodo addTask={addTask} taskDetails={taskDetails} setTaskDetails={setTaskDetails} task={task} setTask={setTask} />
       </div>
       {/* DisplayTodo */}
       <div className="w-3/4 mx-auto">
@@ -89,6 +106,7 @@ const AdminTodos = () => {
                           ) : (
                             <DisplayTodo
                               key={t.id}
+                              taskDetails={t.taskDetails}
                               handleDelete={handleDelete}
                               task={t.task}
                               handleEdit={handleEdit}

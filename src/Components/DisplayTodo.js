@@ -8,6 +8,12 @@ const DisplayTodo = ({ taskId, handleDelete, task, handleEdit }) => {
           {task}
         </h1>
         <button
+          type="button"
+          class=" border border-2 border-slate-600 text-slate font-semibold p-1 w-24 rounded-md"
+        >
+          Details
+        </button>
+        <button
           onClick={() => handleEdit(taskId)} // Pass the taskId to handleEdit
           className="mx-2 bg-purple-500 text-white font-semibold p-1 w-24 rounded-md"
         >
@@ -19,6 +25,7 @@ const DisplayTodo = ({ taskId, handleDelete, task, handleEdit }) => {
         >
           Delete
         </button>
+        
       </div>
     </div>
   );
