@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-const EditNote = ({ taskId, task, setAllTasks }) => {
+const EditNote = ({ taskId, task, setAllTasks, setEditing }) => {
   const [updatedTask, setUpdatedTask] = useState(task.task);
 
   const editTask = () => {
@@ -12,6 +12,8 @@ const EditNote = ({ taskId, task, setAllTasks }) => {
         return t;
       });
     });
+    setEditing(null)
+    
   };
 
   return (
