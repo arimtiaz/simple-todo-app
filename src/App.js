@@ -15,9 +15,11 @@ function App() {
   const [isAdmin, setIsAdmin] = useState(false);
 
   const handleAdminCheckboxChange = (e) => {
-    setIsAdmin(e.target.checked);
-    localStorage.setItem('isAdmin', isAdmin ? 'true' : 'false');
+    const isAdminValue = e.target.checked;
+    setIsAdmin(isAdminValue);
+    localStorage.setItem('isAdmin', isAdminValue ? 'true' : 'false');
   };
+  
 
   return (
     <div className="App ">
