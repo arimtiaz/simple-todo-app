@@ -52,7 +52,6 @@ const AdminTodos = ({ isAdmin }) => {
       const updatedTasks = allTasks.filter((t) => t.id !== id);
       setAllTasks(updatedTasks);
     } else {
-      // Handle unauthorized deletion here
       console.log("Unauthorized: You are not allowed to delete tasks.");
     }
   };
@@ -61,7 +60,6 @@ const AdminTodos = ({ isAdmin }) => {
     if (isAdmin) {
       setEditing(id);
     } else {
-      // Handle unauthorized edit here
       console.log("Unauthorized: You are not allowed to edit tasks.");
     }
   };
@@ -108,8 +106,10 @@ const AdminTodos = ({ isAdmin }) => {
           </div>
         )}
         {/* DisplayTodo */}
-        {isAdmin ? (<div className="w-3/4 mx-auto">
-          <DragDropContext onDragEnd={handleOnDragEnd}>
+        <DragDropContext onDragEnd={handleOnDragEnd}> 
+        {isAdmin ? (
+          <div className="w-3/4 mx-auto">
+            
             <Droppable droppableId="characters">
               {(provided) => (
                 <ul
@@ -117,7 +117,9 @@ const AdminTodos = ({ isAdmin }) => {
                   {...provided.droppableProps}
                   ref={provided.innerRef}
                 >
+                  
                   {allTasks.map((t, index) => {
+                  
                     return (
                       <Draggable key={t.id} draggableId={t.id} index={index}>
                         {(provided) => (
@@ -134,7 +136,6 @@ const AdminTodos = ({ isAdmin }) => {
                               task={t.task}
                               handleEdit={() => handleEdit(t.id)}
                               todoID={t.id}
-                              // Pass the handleTaskDetails function to handle task details
                               handleTaskDetails={() => handleTaskDetails(t.id)}
                             />
                           </li>
@@ -146,50 +147,50 @@ const AdminTodos = ({ isAdmin }) => {
                 </ul>
               )}
             </Droppable>
-          </DragDropContext>
-        </div>) : (<DragDropContext onDragEnd={handleOnDragEnd}>
-            <Droppable droppableId="characters">
-              {(provided) => (
-                <ul
-                  className="characters"
-                  {...provided.droppableProps}
-                  ref={provided.innerRef}
-                >
-                  {allTasks.map((t, index) => {
-                    return (
-                      <Draggable key={t.id} draggableId={t.id} index={index}>
-                        {(provided) => (
-                          <li
+          </div>
+        ) : (
+          <Droppable droppableId="characters">
+            {(provided) => (
+              <ul
+                className="characters"
+                {...provided.droppableProps}
+                ref={provided.innerRef}
+              >
+                {allTasks.map((t, index) => {
+                  return (
+                    <Draggable key={t.id} draggableId={t.id} index={index}>
+                      {(provided) => (
+                        <li
+                          key={t.id}
+                          ref={provided.innerRef}
+                          {...provided.draggableProps}
+                          {...provided.dragHandleProps}
+                        >
+                          <DisplayTodo
                             key={t.id}
-                            ref={provided.innerRef}
-                            {...provided.draggableProps}
-                            {...provided.dragHandleProps}
-                          >
-                            <DisplayTodo
-                              key={t.id}
-                              taskDetails={t.taskDetails}
-                              handleDelete={() => handleDelete(t.id)}
-                              task={t.task}
-                              handleEdit={() => handleEdit(t.id)}
-                              todoID={t.id}
-                              // Pass the handleTaskDetails function to handle task details
-                              handleTaskDetails={() => handleTaskDetails(t.id)}
-                            />
-                          </li>
-                        )}
-                      </Draggable>
-                    );
-                  })}
-                  {provided.placeholder}
-                </ul>
-              )}
-            </Droppable>
-          </DragDropContext>)}
+                            taskDetails={t.taskDetails}
+                            handleDelete={() => handleDelete(t.id)}
+                            task={t.task}
+                            handleEdit={() => handleEdit(t.id)}
+                            todoID={t.id}
+                            handleTaskDetails={() => handleTaskDetails(t.id)}
+                          />
+                        </li>
+                      )}
+                    </Draggable>
+                  );
+                })}
+                {provided.placeholder}
+              </ul>
+            )}
+          </Droppable>
+        )}
+        </DragDropContext>
         <div className="my-12">
           <hr className="border-gray-600 mb-4" />
           <h1 className="text-gray-400 text-xl italic">{quote}</h1>
         </div>
-
+        
         {selectedTask && (
           <DetailedTodo
             task={selectedTask.task}
