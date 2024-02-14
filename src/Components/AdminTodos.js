@@ -5,7 +5,7 @@ import EditNote from "./EditNote";
 import { v4 as uuidv4 } from "uuid";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 import DetailedTodo from "./DetailedTodo";
-import axios from "axios";
+import UserTodo from "./UserTodo";
 
 const AdminTodos = ({ isAdmin }) => {
   const [allTasks, setAllTasks] = useState([]);
@@ -177,7 +177,7 @@ const AdminTodos = ({ isAdmin }) => {
                             {...provided.draggableProps}
                             {...provided.dragHandleProps}
                           >
-                            <DisplayTodo
+                            <UserTodo
                               key={t.id}
                               taskDetails={t.taskDetails}
                               handleDelete={() => handleDelete(t.id)}

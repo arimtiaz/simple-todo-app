@@ -1,8 +1,5 @@
-import React from "react";
-import { useHistory } from "react-router-dom";
-
 const DetailedTodo = ({ task, taskDetails }) => {
- console.log(task, taskDetails)
+  console.log("Received props:", task, taskDetails);
 
   return (
     <div className="max-w-screen-lg mx-auto flex justify-center items-center h-screen">
@@ -16,7 +13,6 @@ const DetailedTodo = ({ task, taskDetails }) => {
         <hr className="border-gray-600 mb-4" />
         <button
           className="border border-2 border-slate-600 text-slate font-semibold p-1 w-24 rounded-md"
-      
         >
           Back
         </button>
