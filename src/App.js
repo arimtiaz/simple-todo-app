@@ -16,7 +16,7 @@ function App() {
 
   const handleAdminCheckboxChange = (e) => {
     setIsAdmin(e.target.checked);
-    console.log(isAdmin);
+    localStorage.setItem('isAdmin', isAdmin ? 'true' : 'false');
   };
 
   return (
@@ -36,8 +36,8 @@ function App() {
           }
         />
 
-        <Route path="/admintodos" element={<AdminTodos isAdmin={isAdmin}/>} />
-        <Route path="/usertodos" element={<AdminTodos />} />
+        <Route path="/admintodos" element={<AdminTodos setIsAdmin={setIsAdmin} isAdmin={isAdmin}/>} />
+      <Route path="/usertodos" element={<AdminTodos />} />
         <Route path="/usertodos/:taskID" element={<DetailedTodo />} />
         <Route path="*" element={<Navigate to="/" />} />
       </Routes>

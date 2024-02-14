@@ -6,15 +6,85 @@ import { v4 as uuidv4 } from "uuid";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 import DetailedTodo from "./DetailedTodo";
 import UserTodo from "./UserTodo";
+import { getAuth, signOut } from "firebase/auth";
+import { useNavigate } from "react-router";
 
-const AdminTodos = ({ isAdmin }) => {
+const AdminTodos = ({ setIsAdmin, isAdmin }) => {
   const [allTasks, setAllTasks] = useState([]);
-  const [task, setTask] = useState("");
+  const [task, setTask] = useState(""); 
   const [editing, setEditing] = useState(null);
   const [selectedTask, setSelectedTask] = useState(null);
-  const [taskDetails, setTaskDetails] = useState("");
+  const [taskDetails, setTaskDetails] = useState(""); 
   const [quote, setQuote] = useState("");
+  const navigate = useNavigate();
 
+  // Function to handle logout
+  const handleLogout = () => {
+    const auth = getAuth();
+    signOut(auth)
+      .then(() => {
+       
+        navigate('/signup');
+        
+        setIsAdmin(false);
+      })
+      .catch((error) => {
+        console.error("Logout error:", error);
+      });
+  };
+
+  const addTask = () => {
+    const newTask = {
+      id: uuidv4(),
+      task: task,
+      taskDetails: taskDetails,
+    };
+    setAllTasks((prevTasks) => [...prevTasks, newTask]);
+    setTask("");
+    setTaskDetails("");
+
+    const updatedTasks = [...allTasks, newTask];
+    window.localStorage.setItem("allTasks", JSON.stringify(updatedTasks));
+  };
+
+
+  const handleDelete = (id) => {
+    if (isAdmin) {
+      const updatedTasks = allTasks.filter((t) => t.id !== id);
+      setAllTasks(updatedTasks);
+    } else {
+      console.log("Unauthorized: You are not allowed to delete tasks.");
+    }
+  };
+
+  const handleEdit = (id) => {
+    if (isAdmin) {
+      setEditing(id);
+    } else {
+      console.log("Unauthorized: You are not allowed to edit tasks.");
+    }
+  };
+
+  // Function to handle displaying task details
+  const handleTaskDetails = (taskId) => {
+    const selected = allTasks.find((task) => task.id === taskId);
+    if (selected) {
+      setSelectedTask(selected);
+      setTaskDetails(selected.taskDetails);
+    }
+  };
+
+  // Function to handle drag and drop reordering of tasks
+  function handleOnDragEnd(result) {
+    if (!result.destination) return;
+
+    const items = Array.from(allTasks);
+    const [reorderedItem] = items.splice(result.source.index, 1);
+    items.splice(result.destination.index, 0, reorderedItem);
+
+    setAllTasks(items);
+  }
+  
   useEffect(() => {
     const data = window.localStorage.getItem("allTasks");
     if (data) {
@@ -36,52 +106,6 @@ const AdminTodos = ({ isAdmin }) => {
       });
   }, []);
 
-  const addTask = () => {
-    const newTask = {
-      id: uuidv4(),
-      task: task,
-      taskDetails: taskDetails,
-    };
-    setAllTasks((prevTasks) => [...prevTasks, newTask]);
-    setTask("");
-    setTaskDetails("");
-  };
-
-  const handleDelete = (id) => {
-    if (isAdmin) {
-      const updatedTasks = allTasks.filter((t) => t.id !== id);
-      setAllTasks(updatedTasks);
-    } else {
-      console.log("Unauthorized: You are not allowed to delete tasks.");
-    }
-  };
-
-  const handleEdit = (id) => {
-    if (isAdmin) {
-      setEditing(id);
-    } else {
-      console.log("Unauthorized: You are not allowed to edit tasks.");
-    }
-  };
-
-  const handleTaskDetails = (taskId) => {
-    const selected = allTasks.find((task) => task.id === taskId);
-    if (selected) {
-      setSelectedTask(selected);
-      setTaskDetails(selected.taskDetails);
-    }
-  };
-
-  function handleOnDragEnd(result) {
-    if (!result.destination) return;
-
-    const items = Array.from(allTasks);
-    const [reorderedItem] = items.splice(result.source.index, 1);
-    items.splice(result.destination.index, 0, reorderedItem);
-
-    setAllTasks(items);
-  }
-
   return (
     <div className="max-w-screen-lg mx-auto">
       {/* Header */}
@@ -91,6 +115,14 @@ const AdminTodos = ({ isAdmin }) => {
             <h1 className="text-white text-2xl font-semibold">
               Hi👋, Your Todo's
             </h1>
+          </div>
+          <div>
+            <button
+              onClick={handleLogout} // Call handleLogout function on button click
+              className="bg-white px-3 text-lg font-semibold rounded-md"
+            >
+              Logout
+            </button>
           </div>
         </div>
         {/* Create Todos */}

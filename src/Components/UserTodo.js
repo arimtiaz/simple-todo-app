@@ -1,17 +1,14 @@
 import React, { useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link } from "react-router-dom";
 
-const UserTodo = ({ todoID, handleDelete, task, handleEdit }) => {
-  const [enrollmentCount, setEnrollmentCount] = useState(0); // State to track enrollment count
-  const { todoID: urlTodoID } = useParams();
+const UserTodo = ({ todoID, handleDelete, task, handleEdit, handleTaskDetails }) => {
+  const [enrollmentCount, setEnrollmentCount] = useState(0);
 
   const enrollUser = () => {
-    if (enrollmentCount === 0) { // Check if user hasn't enrolled yet
-      setEnrollmentCount(1); // Update enrollment count to indicate enrollment
-      // Optionally, you can perform additional actions upon enrollment
+    if (enrollmentCount === 0) {
+      setEnrollmentCount(1);
       console.log("User enrolled successfully!");
     } else {
-      // Optionally, you can show a message indicating that the user has already enrolled
       console.log("User has already enrolled.");
     }
   };
@@ -22,9 +19,11 @@ const UserTodo = ({ todoID, handleDelete, task, handleEdit }) => {
         <h1 className=" text-white font-semibold text-xl w-3/4 text-left">
           {task}
         </h1>
-        <p className="mx-2 text-orange-400">Enrolled Users: {enrollmentCount}</p>
-        
-        {enrollmentCount === 0 && ( // Render the button only if the user hasn't enrolled yet
+        <p className="mx-2 text-orange-400">
+          Enrolled Users: {enrollmentCount}
+        </p>
+
+        {enrollmentCount === 0 && (
           <button
             type="button"
             className="mx-2 border border-2 border-slate-600 text-slate font-semibold p-1 w-24 rounded-md"
@@ -38,6 +37,7 @@ const UserTodo = ({ todoID, handleDelete, task, handleEdit }) => {
           <button
             type="button"
             className="border border-2 border-slate-600 text-slate font-semibold p-1 w-24 rounded-md"
+            onClick={() => handleTaskDetails={todoID}}
           >
             Details
           </button>

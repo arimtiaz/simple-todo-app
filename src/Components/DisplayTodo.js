@@ -1,7 +1,7 @@
 import React from "react";
 import { Link, useParams } from "react-router-dom";
 
-const DisplayTodo = ({ todoID, handleDelete, task, handleEdit, isAdmin }) => {
+const DisplayTodo = ({handleTaskDetails, todoID, handleDelete, task, handleEdit }) => {
   const { todoID: urlTodoID } = useParams(); 
 
   return (
@@ -15,6 +15,7 @@ const DisplayTodo = ({ todoID, handleDelete, task, handleEdit, isAdmin }) => {
           <button
             type="button"
             className="border border-2 border-slate-600 text-slate font-semibold p-1 w-24 rounded-md"
+            onClick={() => handleTaskDetails(todoID || urlTodoID)}
           >
             Details
           </button>
