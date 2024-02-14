@@ -13,7 +13,6 @@ const EditNote = ({ taskId, task, setAllTasks, setEditing }) => {
       });
     });
     setEditing(null)
-    
   };
 
   return (

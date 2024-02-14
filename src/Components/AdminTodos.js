@@ -4,19 +4,19 @@ import DisplayTodo from "./DisplayTodo";
 import EditNote from "./EditNote";
 import { v4 as uuidv4 } from "uuid";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
-import DetailedTodo from "./DetailedTodo";
+import DetailedTodo from "./DetailedTodo"; // Import DetailedTodo component
 import axios from "axios";
 
 const AdminTodos = () => {
   const [allTasks, setAllTasks] = useState([]);
   const [task, setTask] = useState("");
   const [editing, setEditing] = useState(null);
+  const [selectedTask, setSelectedTask] = useState(null); 
   const [taskDetails, setTaskDetails] = useState("");
   const [quote, setQuote] = useState("");
 
   useEffect(() => {
     const data = window.localStorage.getItem("allTasks");
-    console.log("Getting data from allTasks", data);
     if (data) {
       setAllTasks(JSON.parse(data));
     } else {
@@ -26,7 +26,6 @@ const AdminTodos = () => {
 
   useEffect(() => {
     window.localStorage.setItem("allTasks", JSON.stringify(allTasks));
-    console.log("Saving data from allTasks", allTasks);
   }, [allTasks]);
 
   useEffect(() => {
@@ -37,13 +36,6 @@ const AdminTodos = () => {
       });
   }, []);
 
-  const fetchNewQuote = () => {
-    fetch("http://api.quotable.io/random")
-      .then((res) => res.json())
-      .then((quote) => {
-        setQuote(quote.content);
-      });
-  };
   const addTask = () => {
     const newTask = {
       id: uuidv4(),
@@ -63,6 +55,15 @@ const AdminTodos = () => {
   const handleEdit = (id) => {
     setEditing(id);
   };
+
+  const handleTaskDetails = (taskId) => {
+    const selected = allTasks.find((task) => task.id === taskId);
+    if (selected) {
+      setSelectedTask(selected);
+      setTaskDetails(selected.taskDetails); 
+    }
+  };
+
   function handleOnDragEnd(result) {
     if (!result.destination) return;
 
@@ -78,9 +79,7 @@ const AdminTodos = () => {
       {/* Header */}
       <div className="grid grid-cols-2 my-5">
         <div>
-          <h1 className="text-white text-2xl font-semibold">
-            Hi👋, Your Todo's
-          </h1>
+          <h1 className="text-white text-2xl font-semibold">Hi👋, Your Todo's</h1>
         </div>
       </div>
       {/* Create Todos */}
@@ -113,25 +112,16 @@ const AdminTodos = () => {
                           {...provided.draggableProps}
                           {...provided.dragHandleProps}
                         >
-                          {editing === t.id ? (
-                            <EditNote
-                              task={t}
-                              setTask={setTask}
-                              allTasks={allTasks}
-                              setAllTasks={setAllTasks}
-                              setEditing={setEditing}
-                              taskId={t.id}
-                            />
-                          ) : (
-                            <DisplayTodo
-                              key={t.id}
-                              taskDetails={t.taskDetails}
-                              handleDelete={handleDelete}
-                              task={t.task}
-                              handleEdit={handleEdit}
-                              taskId={t.id}
-                            />
-                          )}
+                          <DisplayTodo
+                            key={t.id}
+                            taskDetails={t.taskDetails}
+                            handleDelete={handleDelete}
+                            task={t.task}
+                            handleEdit={handleEdit}
+                            todoID={t.id}
+                            // Pass the handleTaskDetails function to handle task details
+                            handleTaskDetails={() => handleTaskDetails(t.id)}
+                          />
                         </li>
                       )}
                     </Draggable>
@@ -144,11 +134,14 @@ const AdminTodos = () => {
         </DragDropContext>
       </div>
       <div className="my-12">
-        <hr class="border-gray-600 mb-4" />
-        
-          <h1 className="text-gray-400 text-xl italic">{quote}</h1>"
-
+        <hr className="border-gray-600 mb-4" />
+        <h1 className="text-gray-400 text-xl italic">{quote}</h1>
       </div>
+     
+      {selectedTask && (
+  <DetailedTodo task={selectedTask.task} taskDetails={selectedTask.taskDetails} />
+)}
+
     </div>
   );
 };

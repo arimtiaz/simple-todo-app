@@ -4,7 +4,7 @@ import { auth } from '../../firebase.init';
 import { useNavigate } from 'react-router';
 import { Link } from 'react-router-dom';
 
-const SignIn = () => {
+const SignIn = ({ isAdmin }) => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState("");
@@ -23,9 +23,13 @@ const SignIn = () => {
         e.preventDefault();
         signInWithEmailAndPassword(auth, email, password)
             .then((userCredential) => {
-                // Signed in 
                 const user = userCredential.user;
-                navigate('/home');
+                
+                if (isAdmin) {
+                  navigate("/admintodos");
+                } else {
+                  navigate("/usertodos"); 
+                }   
             })
             .catch((error) => {
                 const errorMessage = error.message;

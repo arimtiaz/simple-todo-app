@@ -3,10 +3,11 @@ import { createUserWithEmailAndPassword } from "firebase/auth";
 import { Link, useNavigate } from "react-router-dom";
 import { auth } from "../../firebase.init";
 
-const SignUp = () => {
+const SignUp = ({isAdmin, handleAdminCheckboxChange}) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+
 
   const navigate = useNavigate();
 
@@ -20,59 +21,64 @@ const SignUp = () => {
 
   function handleSubmit(e) {
     e.preventDefault();
-    // const auth = getAuth();
+  
+    const isAdmin = document.getElementById('isAdminCheckbox').checked;
+  
     createUserWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
-        // Signed up
         const user = userCredential.user;
-        navigate("/home");
-        // ...
+        if (isAdmin) {
+          navigate("/admintodos");
+        } else {
+          navigate("/usertodos"); 
+        }
       })
       .catch((error) => {
-        const errorCode = error.code;
         const errorMessage = error.message;
         setError(errorMessage);
-        // ...
-      });
+      }); 
   }
 
   return (
-    <div className=" max-w-screen-lg mx-auto flex justify-center items-center h-screen">
+    <div className="max-w-screen-lg mx-auto flex justify-center items-center h-screen">
       <div className="shadow-sm rounded-xl p-4 md:p-5 dark:bg-zinc-900 dark:border-gray-700 dark:text-white">
         <h1 className="text-white text-xl font-bold my-4">Sign Up</h1>
         <form onSubmit={handleSubmit}>
           <input
             type="email"
-            id="input-label"
-            class="my-2 py-3 px-4 block w-full border-gray-200 bg-gray-600 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 text-white"
+            className="my-2 py-3 px-4 block w-full border-gray-200 bg-gray-600 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 text-white"
             placeholder="example@example.com"
             onChange={handleEmail}
-          ></input>
+          />
           <input
             type="password"
-            id="input-label"
-            class="my-2 py-3 px-4 block w-full border-gray-200 bg-gray-600 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 text-white"
+            className="my-2 py-3 px-4 block w-full border-gray-200 bg-gray-600 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 text-white"
             placeholder="********"
             onChange={handlePassword}
-          ></input>
-          <div class="flex">
+          />
+
+          <div className="flex items-center">
             <input
               type="checkbox"
-              class="shrink-0 mt-0.5 border-gray-200 rounded text-blue-600 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-gray-800 dark:border-gray-700 dark:checked:bg-blue-500 dark:checked:border-blue-500 dark:focus:ring-offset-gray-800"
-              id="hs-default-checkbox"
+              id="isAdminCheckbox"
+              className="mr-2"
+              onChange={handleAdminCheckboxChange}
             />
-            <label className="text-sm text-white ms-2 dark:text-white">
+            <label htmlFor="isAdminCheckbox" className="text-white text-sm">
               Admin
             </label>
           </div>
           <button
             type="submit"
-            class="my-2 py-3 px-4 block w-full border-gray-200 bg-emerald-600 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 text-white font-semibold"
+            className="my-2 py-3 px-4 block w-full border-gray-200 bg-emerald-600 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 text-white font-semibold"
           >
             Create Account
           </button>
         </form>
-        <Link to='/signin'> <p className="text-center font-semibold">Log In</p></Link>
+        <p className="text-sm text-red-500 py-2">{error}</p>
+        <Link to="/signin" className="text-center font-semibold">
+          Log In
+        </Link>
       </div>
     </div>
   );
