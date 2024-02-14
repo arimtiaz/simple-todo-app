@@ -1,7 +1,7 @@
 import React from "react";
 import { Link, useParams } from "react-router-dom";
 
-const DisplayTodo = ({ todoID, handleDelete, task, handleEdit }) => {
+const DisplayTodo = ({ todoID, handleDelete, task, handleEdit, isAdmin }) => {
   const { todoID: urlTodoID } = useParams(); 
 
   return (

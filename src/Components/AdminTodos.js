@@ -4,7 +4,7 @@ import DisplayTodo from "./DisplayTodo";
 import EditNote from "./EditNote";
 import { v4 as uuidv4 } from "uuid";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
-import DetailedTodo from "./DetailedTodo"; // Import DetailedTodo component
+import DetailedTodo from "./DetailedTodo";
 import axios from "axios";
 
 const AdminTodos = ({ isAdmin }) => {
@@ -106,10 +106,60 @@ const AdminTodos = ({ isAdmin }) => {
           </div>
         )}
         {/* DisplayTodo */}
-        <DragDropContext onDragEnd={handleOnDragEnd}> 
-        {isAdmin ? (
-          <div className="w-3/4 mx-auto">
-            
+        <DragDropContext onDragEnd={handleOnDragEnd}>
+          {isAdmin ? (
+            <div className="w-3/4 mx-auto">
+              <Droppable droppableId="characters">
+                {(provided) => (
+                  <ul
+                    className="characters"
+                    {...provided.droppableProps}
+                    ref={provided.innerRef}
+                  >
+                    {allTasks.map((t, index) => {
+                      return (
+                        <Draggable key={t.id} draggableId={t.id} index={index}>
+                          {(provided) => (
+                            <li
+                              key={t.id}
+                              ref={provided.innerRef}
+                              {...provided.draggableProps}
+                              {...provided.dragHandleProps}
+                            >
+                              {editing === t.id ? (
+                                <EditNote
+                                  task={t}
+                                  setTask={setTask}
+                                  allTasks={allTasks}
+                                  setAllTasks={setAllTasks}
+                                  setEditing={setEditing}
+                                  taskId={t.id}
+                                />
+                              ) : (
+                                <DisplayTodo
+                                  isAdmin={isAdmin}
+                                  key={t.id}
+                                  taskDetails={t.taskDetails}
+                                  handleDelete={() => handleDelete(t.id)}
+                                  task={t.task}
+                                  handleEdit={() => handleEdit(t.id)}
+                                  todoID={t.id}
+                                  handleTaskDetails={() =>
+                                    handleTaskDetails(t.id)
+                                  }
+                                />
+                              )}
+                            </li>
+                          )}
+                        </Draggable>
+                      );
+                    })}
+                    {provided.placeholder}
+                  </ul>
+                )}
+              </Droppable>
+            </div>
+          ) : (
             <Droppable droppableId="characters">
               {(provided) => (
                 <ul
@@ -117,9 +167,7 @@ const AdminTodos = ({ isAdmin }) => {
                   {...provided.droppableProps}
                   ref={provided.innerRef}
                 >
-                  
                   {allTasks.map((t, index) => {
-                  
                     return (
                       <Draggable key={t.id} draggableId={t.id} index={index}>
                         {(provided) => (
@@ -147,50 +195,13 @@ const AdminTodos = ({ isAdmin }) => {
                 </ul>
               )}
             </Droppable>
-          </div>
-        ) : (
-          <Droppable droppableId="characters">
-            {(provided) => (
-              <ul
-                className="characters"
-                {...provided.droppableProps}
-                ref={provided.innerRef}
-              >
-                {allTasks.map((t, index) => {
-                  return (
-                    <Draggable key={t.id} draggableId={t.id} index={index}>
-                      {(provided) => (
-                        <li
-                          key={t.id}
-                          ref={provided.innerRef}
-                          {...provided.draggableProps}
-                          {...provided.dragHandleProps}
-                        >
-                          <DisplayTodo
-                            key={t.id}
-                            taskDetails={t.taskDetails}
-                            handleDelete={() => handleDelete(t.id)}
-                            task={t.task}
-                            handleEdit={() => handleEdit(t.id)}
-                            todoID={t.id}
-                            handleTaskDetails={() => handleTaskDetails(t.id)}
-                          />
-                        </li>
-                      )}
-                    </Draggable>
-                  );
-                })}
-                {provided.placeholder}
-              </ul>
-            )}
-          </Droppable>
-        )}
+          )}
         </DragDropContext>
         <div className="my-12">
           <hr className="border-gray-600 mb-4" />
           <h1 className="text-gray-400 text-xl italic">{quote}</h1>
         </div>
-        
+
         {selectedTask && (
           <DetailedTodo
             task={selectedTask.task}
