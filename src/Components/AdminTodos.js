@@ -7,11 +7,11 @@ import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 import DetailedTodo from "./DetailedTodo"; // Import DetailedTodo component
 import axios from "axios";
 
-const AdminTodos = () => {
+const AdminTodos = ({ isAdmin }) => {
   const [allTasks, setAllTasks] = useState([]);
   const [task, setTask] = useState("");
   const [editing, setEditing] = useState(null);
-  const [selectedTask, setSelectedTask] = useState(null); 
+  const [selectedTask, setSelectedTask] = useState(null);
   const [taskDetails, setTaskDetails] = useState("");
   const [quote, setQuote] = useState("");
 
@@ -48,19 +48,29 @@ const AdminTodos = () => {
   };
 
   const handleDelete = (id) => {
-    const updatedTasks = allTasks.filter((t) => t.id !== id);
-    setAllTasks(updatedTasks);
+    if (isAdmin) {
+      const updatedTasks = allTasks.filter((t) => t.id !== id);
+      setAllTasks(updatedTasks);
+    } else {
+      // Handle unauthorized deletion here
+      console.log("Unauthorized: You are not allowed to delete tasks.");
+    }
   };
 
   const handleEdit = (id) => {
-    setEditing(id);
+    if (isAdmin) {
+      setEditing(id);
+    } else {
+      // Handle unauthorized edit here
+      console.log("Unauthorized: You are not allowed to edit tasks.");
+    }
   };
 
   const handleTaskDetails = (taskId) => {
     const selected = allTasks.find((task) => task.id === taskId);
     if (selected) {
       setSelectedTask(selected);
-      setTaskDetails(selected.taskDetails); 
+      setTaskDetails(selected.taskDetails);
     }
   };
 
@@ -77,71 +87,116 @@ const AdminTodos = () => {
   return (
     <div className="max-w-screen-lg mx-auto">
       {/* Header */}
-      <div className="grid grid-cols-2 my-5">
-        <div>
-          <h1 className="text-white text-2xl font-semibold">Hi👋, Your Todo's</h1>
+      <div>
+        <div className="grid grid-cols-2 my-5">
+          <div>
+            <h1 className="text-white text-2xl font-semibold">
+              Hi👋, Your Todo's
+            </h1>
+          </div>
         </div>
-      </div>
-      {/* Create Todos */}
-      <div className="w-3/4 mx-auto my-8">
-        <CreateTodo
-          addTask={addTask}
-          taskDetails={taskDetails}
-          setTaskDetails={setTaskDetails}
-          task={task}
-          setTask={setTask}
-        />
-      </div>
-      {/* DisplayTodo */}
-      <div className="w-3/4 mx-auto">
-        <DragDropContext onDragEnd={handleOnDragEnd}>
-          <Droppable droppableId="characters">
-            {(provided) => (
-              <ul
-                className="characters"
-                {...provided.droppableProps}
-                ref={provided.innerRef}
-              >
-                {allTasks.map((t, index) => {
-                  return (
-                    <Draggable key={t.id} draggableId={t.id} index={index}>
-                      {(provided) => (
-                        <li
-                          key={t.id}
-                          ref={provided.innerRef}
-                          {...provided.draggableProps}
-                          {...provided.dragHandleProps}
-                        >
-                          <DisplayTodo
+        {/* Create Todos */}
+        {isAdmin && (
+          <div className="w-3/4 mx-auto my-8">
+            <CreateTodo
+              addTask={addTask}
+              taskDetails={taskDetails}
+              setTaskDetails={setTaskDetails}
+              task={task}
+              setTask={setTask}
+            />
+          </div>
+        )}
+        {/* DisplayTodo */}
+        {isAdmin ? (<div className="w-3/4 mx-auto">
+          <DragDropContext onDragEnd={handleOnDragEnd}>
+            <Droppable droppableId="characters">
+              {(provided) => (
+                <ul
+                  className="characters"
+                  {...provided.droppableProps}
+                  ref={provided.innerRef}
+                >
+                  {allTasks.map((t, index) => {
+                    return (
+                      <Draggable key={t.id} draggableId={t.id} index={index}>
+                        {(provided) => (
+                          <li
                             key={t.id}
-                            taskDetails={t.taskDetails}
-                            handleDelete={handleDelete}
-                            task={t.task}
-                            handleEdit={handleEdit}
-                            todoID={t.id}
-                            // Pass the handleTaskDetails function to handle task details
-                            handleTaskDetails={() => handleTaskDetails(t.id)}
-                          />
-                        </li>
-                      )}
-                    </Draggable>
-                  );
-                })}
-                {provided.placeholder}
-              </ul>
-            )}
-          </Droppable>
-        </DragDropContext>
-      </div>
-      <div className="my-12">
-        <hr className="border-gray-600 mb-4" />
-        <h1 className="text-gray-400 text-xl italic">{quote}</h1>
-      </div>
-     
-      {selectedTask && (
-  <DetailedTodo task={selectedTask.task} taskDetails={selectedTask.taskDetails} />
-)}
+                            ref={provided.innerRef}
+                            {...provided.draggableProps}
+                            {...provided.dragHandleProps}
+                          >
+                            <DisplayTodo
+                              key={t.id}
+                              taskDetails={t.taskDetails}
+                              handleDelete={() => handleDelete(t.id)}
+                              task={t.task}
+                              handleEdit={() => handleEdit(t.id)}
+                              todoID={t.id}
+                              // Pass the handleTaskDetails function to handle task details
+                              handleTaskDetails={() => handleTaskDetails(t.id)}
+                            />
+                          </li>
+                        )}
+                      </Draggable>
+                    );
+                  })}
+                  {provided.placeholder}
+                </ul>
+              )}
+            </Droppable>
+          </DragDropContext>
+        </div>) : (<DragDropContext onDragEnd={handleOnDragEnd}>
+            <Droppable droppableId="characters">
+              {(provided) => (
+                <ul
+                  className="characters"
+                  {...provided.droppableProps}
+                  ref={provided.innerRef}
+                >
+                  {allTasks.map((t, index) => {
+                    return (
+                      <Draggable key={t.id} draggableId={t.id} index={index}>
+                        {(provided) => (
+                          <li
+                            key={t.id}
+                            ref={provided.innerRef}
+                            {...provided.draggableProps}
+                            {...provided.dragHandleProps}
+                          >
+                            <DisplayTodo
+                              key={t.id}
+                              taskDetails={t.taskDetails}
+                              handleDelete={() => handleDelete(t.id)}
+                              task={t.task}
+                              handleEdit={() => handleEdit(t.id)}
+                              todoID={t.id}
+                              // Pass the handleTaskDetails function to handle task details
+                              handleTaskDetails={() => handleTaskDetails(t.id)}
+                            />
+                          </li>
+                        )}
+                      </Draggable>
+                    );
+                  })}
+                  {provided.placeholder}
+                </ul>
+              )}
+            </Droppable>
+          </DragDropContext>)}
+        <div className="my-12">
+          <hr className="border-gray-600 mb-4" />
+          <h1 className="text-gray-400 text-xl italic">{quote}</h1>
+        </div>
 
+        {selectedTask && (
+          <DetailedTodo
+            task={selectedTask.task}
+            taskDetails={selectedTask.taskDetails}
+          />
+        )}
+      </div>
     </div>
   );
 };

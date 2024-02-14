@@ -9,6 +9,7 @@ import DisplayTodo from "./Components/DisplayTodo";
 import { useState } from "react";
 import PrivateRoute from "./Routes/PrivateRoute";
 import DetailedTodo from "./Components/DetailedTodo";
+import UserTodo from "./Components/UserTodo";
 
 function App() {
   const [isAdmin, setIsAdmin] = useState(false);
@@ -35,8 +36,8 @@ function App() {
           }
         />
 
-        <Route path="/admintodos" element={<AdminTodos/>} />
-        <Route path="/usertodos" element={<DisplayTodo />} />
+        <Route path="/admintodos" element={<AdminTodos isAdmin={isAdmin}/>} />
+        <Route path="/usertodos" element={<AdminTodos />} />
         <Route path="/usertodos/:taskID" element={<DetailedTodo />} />
         <Route path="*" element={<Navigate to="/" />} />
       </Routes>
