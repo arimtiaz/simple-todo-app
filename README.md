@@ -28,4 +28,4 @@ A simple Todo application built with React.js, demonstrating CRUD operations, us
 1. Clone the repository:
 
 ```bash
-git clone https://github.com/your-username/todo-app.git
+git clone https://github.com/arimtiaz/simple-todo-app
