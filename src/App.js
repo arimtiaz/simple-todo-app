@@ -1,4 +1,3 @@
-
 import "./App.css";
 import "preline/preline";
 import AdminTodos from "./Components/AdminTodos";
@@ -15,9 +14,8 @@ function App() {
   const handleAdminCheckboxChange = (e) => {
     const isAdminValue = e.target.checked;
     setIsAdmin(isAdminValue);
-    localStorage.setItem('isAdmin', isAdminValue ? 'true' : 'false');
+    localStorage.setItem("isAdmin", isAdminValue ? "true" : "false");
   };
-  
 
   return (
     <div className="App ">
@@ -25,17 +23,18 @@ function App() {
         <Route path="/" element={<Navigate to="/signup" />} />
 
         <Route
-  path="/signup"
-  element={<SignUp handleAdminCheckboxChange={handleAdminCheckboxChange} />}
-/>
+          path="/signup"
+          element={
+            <SignUp handleAdminCheckboxChange={handleAdminCheckboxChange} />
+          }
+        />
+        <Route path="/signin" element={<SignIn isAdmin={isAdmin} />} />
+
         <Route
-  path="/signin"
-  element={<SignIn isAdmin={isAdmin} />}
-/>
-
-
-        <Route path="/admintodos" element={<AdminTodos setIsAdmin={setIsAdmin} isAdmin={isAdmin}/>} />
-      <Route path="/usertodos" element={<UserTodo></UserTodo>} />
+          path="/admintodos"
+          element={<AdminTodos setIsAdmin={setIsAdmin} isAdmin={isAdmin} />}
+        />
+        <Route path="/usertodos" element={<AdminTodos></AdminTodos>} />
         <Route path="/usertodos/:taskID" element={<DetailedTodo />} />
         <Route path="*" element={<Navigate to="/" />} />
       </Routes>

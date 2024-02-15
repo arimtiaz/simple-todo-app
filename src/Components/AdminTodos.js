@@ -210,7 +210,7 @@ const AdminTodos = ({ setIsAdmin, isAdmin }) => {
                             {...provided.draggableProps}
                             {...provided.dragHandleProps}
                           >
-                            {/* <UserTodo
+                            <UserTodo
                               key={t.id}
                               taskDetails={t.taskDetails}
                               handleDelete={() => handleDelete(t.id)}
@@ -218,7 +218,7 @@ const AdminTodos = ({ setIsAdmin, isAdmin }) => {
                               handleEdit={() => handleEdit(t.id)}
                               todoID={t.id}
                             
-                            /> */}
+                            />
                           </li>
                         )}
                       </Draggable>
