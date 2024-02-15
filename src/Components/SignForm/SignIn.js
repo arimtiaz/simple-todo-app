@@ -14,12 +14,12 @@ const SignIn = ({ isAdmin }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+    
     try {
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
       if (user) {
-        // Redirect based on isAdmin prop
+        
         if (isAdmin) {
           navigate("/admintodos");
         } else {

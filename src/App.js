@@ -33,10 +33,9 @@ function App() {
 
         <Route
           path="/admintodos"
-          element={<PrivateRoute><AdminTodos setIsAdmin={setIsAdmin} isAdmin={isAdmin} /></PrivateRoute>}
+          element={<AdminTodos setIsAdmin={setIsAdmin} isAdmin={isAdmin} />}
         />
-        {/* <PrivateRoute path="/usertodos" element={<UserTodo />} /> */}
-        <Route path="/usertodos" element={<PrivateRoute component={<UserTodo></UserTodo>}></PrivateRoute>} />
+        <Route path="/usertodos" element={<AdminTodos></AdminTodos>} /> 
         <Route path="/usertodos/:taskID" element={<DetailedTodo />} />
         <Route path="*" element={<Navigate to="/" />} />
       </Routes>
