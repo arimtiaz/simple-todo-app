@@ -11,10 +11,9 @@ import { useNavigate } from "react-router";
 
 const AdminTodos = ({ setIsAdmin, isAdmin }) => {
   const [allTasks, setAllTasks] = useState([]);
-  const [task, setTask] = useState(""); 
+  const [task, setTask] = useState("");
   const [editing, setEditing] = useState(null);
-  const [selectedTask, setSelectedTask] = useState(null);
-  const [taskDetails, setTaskDetails] = useState(""); 
+  const [taskDetails, setTaskDetails] = useState("");
   const [quote, setQuote] = useState("");
   const navigate = useNavigate();
 
@@ -23,9 +22,8 @@ const AdminTodos = ({ setIsAdmin, isAdmin }) => {
     const auth = getAuth();
     signOut(auth)
       .then(() => {
-       
-        navigate('/signup');
-        
+        navigate("/signup");
+
         setIsAdmin(false);
       })
       .catch((error) => {
@@ -47,7 +45,6 @@ const AdminTodos = ({ setIsAdmin, isAdmin }) => {
     window.localStorage.setItem("allTasks", JSON.stringify(updatedTasks));
   };
 
-
   const handleDelete = (id) => {
     if (isAdmin) {
       const updatedTasks = allTasks.filter((t) => t.id !== id);
@@ -65,16 +62,15 @@ const AdminTodos = ({ setIsAdmin, isAdmin }) => {
     }
   };
 
-  // Function to handle displaying task details
-  const handleTaskDetails = (taskId) => {
-    const selected = allTasks.find((task) => task.id === taskId);
-    if (selected) {
-      setSelectedTask(selected);
-      setTaskDetails(selected.taskDetails);
-    }
-  };
+  // const handleTaskDetails = (taskId) => {
+  //   const selected = allTasks.find((task) => task.id === taskId);
+  //   if (selected) {
+  //     console.log("Selected Task:", selected);
+  //     setSelectedTask(selected);
+  //     setTaskDetails(selected.taskDetails);
+  //   }
+  // };
 
-  // Function to handle drag and drop reordering of tasks
   function handleOnDragEnd(result) {
     if (!result.destination) return;
 
@@ -84,7 +80,7 @@ const AdminTodos = ({ setIsAdmin, isAdmin }) => {
 
     setAllTasks(items);
   }
-  
+
   useEffect(() => {
     const data = window.localStorage.getItem("allTasks");
     if (data) {
@@ -176,9 +172,14 @@ const AdminTodos = ({ setIsAdmin, isAdmin }) => {
                                   task={t.task}
                                   handleEdit={() => handleEdit(t.id)}
                                   todoID={t.id}
-                                  handleTaskDetails={() =>
-                                    handleTaskDetails(t.id)
-                                  }
+                          
+                                  // selectedTask={selectedTask}
+                                  allTasks={allTasks}
+                                  setTaskDetails={setTaskDetails}
+                                  // setSelectedTask={setSelectedTask}
+                                  // handleTaskDetails={() =>
+                                  //   handleTaskDetails(t.id)
+                                  // }
                                 />
                               )}
                             </li>
@@ -209,15 +210,15 @@ const AdminTodos = ({ setIsAdmin, isAdmin }) => {
                             {...provided.draggableProps}
                             {...provided.dragHandleProps}
                           >
-                            <UserTodo
+                            {/* <UserTodo
                               key={t.id}
                               taskDetails={t.taskDetails}
                               handleDelete={() => handleDelete(t.id)}
                               task={t.task}
                               handleEdit={() => handleEdit(t.id)}
                               todoID={t.id}
-                              handleTaskDetails={() => handleTaskDetails(t.id)}
-                            />
+                            
+                            /> */}
                           </li>
                         )}
                       </Draggable>
@@ -233,13 +234,6 @@ const AdminTodos = ({ setIsAdmin, isAdmin }) => {
           <hr className="border-gray-600 mb-4" />
           <h1 className="text-gray-400 text-xl italic">{quote}</h1>
         </div>
-
-        {selectedTask && (
-          <DetailedTodo
-            task={selectedTask.task}
-            taskDetails={selectedTask.taskDetails}
-          />
-        )}
       </div>
     </div>
   );

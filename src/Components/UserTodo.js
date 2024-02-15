@@ -37,7 +37,7 @@ const UserTodo = ({ todoID, handleDelete, task, handleEdit, handleTaskDetails })
           <button
             type="button"
             className="border border-2 border-slate-600 text-slate font-semibold p-1 w-24 rounded-md"
-            onClick={() => handleTaskDetails={todoID}}
+            onClick={() =>handleTaskDetails(todoID)}
           >
             Details
           </button>

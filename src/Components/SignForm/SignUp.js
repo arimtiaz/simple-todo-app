@@ -75,10 +75,13 @@
               Create Account
             </button>
           </form>
+          <Link to="/signin"><button
+              type="submit"
+              className="my-2 py-3 px-4 block w-full border-gray-200 bg-slate-600 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 text-white font-semibold"
+            >
+              Log In
+            </button></Link>
           <p className="text-sm text-red-500 py-2">{error}</p>
-          <Link to="/signin" className="text-center font-semibold">
-            Log In
-          </Link>
         </div>
       </div>
     );
