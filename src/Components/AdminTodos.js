@@ -173,13 +173,10 @@ const AdminTodos = ({ setIsAdmin, isAdmin }) => {
                                   handleEdit={() => handleEdit(t.id)}
                                   todoID={t.id}
                           
-                                  // selectedTask={selectedTask}
+                            
                                   allTasks={allTasks}
                                   setTaskDetails={setTaskDetails}
-                                  // setSelectedTask={setSelectedTask}
-                                  // handleTaskDetails={() =>
-                                  //   handleTaskDetails(t.id)
-                                  // }
+                                
                                 />
                               )}
                             </li>
@@ -217,7 +214,10 @@ const AdminTodos = ({ setIsAdmin, isAdmin }) => {
                               task={t.task}
                               handleEdit={() => handleEdit(t.id)}
                               todoID={t.id}
-                            
+                              isAdmin={isAdmin}
+                        
+                              allTasks={allTasks}
+                              setTaskDetails={setTaskDetails}
                             />
                           </li>
                         )}

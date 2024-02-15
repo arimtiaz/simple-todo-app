@@ -1,6 +1,6 @@
+// UserTodo.js
 import React, { useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import DetailedTodo from "./DetailedTodo";
 
 const UserTodo = ({
   taskDetails,
@@ -10,16 +10,6 @@ const UserTodo = ({
   task,
 }) => {
   const [enrollmentCount, setEnrollmentCount] = useState(0);
-
-  const enrollUser = () => {
-    if (enrollmentCount === 0) {
-      setEnrollmentCount(1);
-      console.log("User enrolled successfully!");
-    } else {
-      console.log("User has already enrolled.");
-    }
-  };
-
   const [selectedTask, setSelectedTask] = useState({});
   const [isSelected, setIsSelected] = useState(false);
   const { todoID: urlTodoID } = useParams();
@@ -32,6 +22,15 @@ const UserTodo = ({
       setTaskDetails(selected.taskDetails);
       setIsSelected(true); 
       console.log(selected.task, selected.taskDetails, selected.id);
+    }
+  };
+
+  const enrollUser = () => {
+    if (enrollmentCount === 0) {
+      setEnrollmentCount(1);
+      console.log("User enrolled successfully!");
+    } else {
+      console.log("User has already enrolled.");
     }
   };
 
@@ -58,13 +57,12 @@ const UserTodo = ({
           <button
             type="button"
             className="border border-2 border-slate-600 text-slate font-semibold p-1 w-24 rounded-md"
-            onClick={() => handleTaskDetails(todoID)}
+            onClick={handleTaskDetails}
           >
             Details
           </button>
         </Link>
       </div>
-      {isSelected && <DetailedTodo task={task} taskDetails={taskDetails}></DetailedTodo>}
     </div>
   );
 };

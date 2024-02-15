@@ -16,9 +16,7 @@ const DetailedTodo = ({task, taskDetails}) => {
           <button
             className="border border-2 border-slate-600 text-slate font-semibold p-1 w-24 rounded-md"
             onClick={() => {
-              // Handle the back button action here
-              // For example, you can use history.goBack() to go back
-              // Or you can navigate to a specific route
+              
             }}
           >
             Back

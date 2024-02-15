@@ -7,6 +7,7 @@ import { useState } from "react";
 import DetailedTodo from "./Components/DetailedTodo";
 import UserTodo from "./Components/UserTodo";
 import SignIn from "./Components/SignForm/SignIn";
+import PrivateRoute from "./Routes/PrivateRoute";
 
 function App() {
   const [isAdmin, setIsAdmin] = useState(false);
@@ -32,9 +33,10 @@ function App() {
 
         <Route
           path="/admintodos"
-          element={<AdminTodos setIsAdmin={setIsAdmin} isAdmin={isAdmin} />}
+          element={<PrivateRoute><AdminTodos setIsAdmin={setIsAdmin} isAdmin={isAdmin} /></PrivateRoute>}
         />
-        <Route path="/usertodos" element={<AdminTodos></AdminTodos>} />
+        {/* <PrivateRoute path="/usertodos" element={<UserTodo />} /> */}
+        <Route path="/usertodos" element={<PrivateRoute component={<UserTodo></UserTodo>}></PrivateRoute>} />
         <Route path="/usertodos/:taskID" element={<DetailedTodo />} />
         <Route path="*" element={<Navigate to="/" />} />
       </Routes>
