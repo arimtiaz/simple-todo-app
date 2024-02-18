@@ -37,7 +37,6 @@ function App() {
         />
         <Route path="/usertodos" element={<AdminTodos></AdminTodos>} /> 
         <Route path="/usertodos/:taskID" element={<DetailedTodo />} />
-        <Route path="*" element={<Navigate to="/" />} />
       </Routes>
     </div>
   );

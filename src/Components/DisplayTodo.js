@@ -3,16 +3,13 @@ import { Link, useParams } from "react-router-dom";
 import DetailedTodo from "./DetailedTodo";
 
 const DisplayTodo = ({
-  taskDetails,
   allTasks,
   setTaskDetails,
   todoID,
   handleDelete,
-  task,
   handleEdit,
 }) => {
   const [selectedTask, setSelectedTask] = useState({});
-  const [isSelected, setIsSelected] = useState(false);
   const { todoID: urlTodoID } = useParams();
 
   const handleTaskDetails = (taskId) => {
@@ -21,8 +18,6 @@ const DisplayTodo = ({
     if (selected) {
       setSelectedTask(selected);
       setTaskDetails(selected.taskDetails);
-      setIsSelected(true); 
-      console.log(selected.task, selected.taskDetails, selected.id);
     }
   };
 
@@ -30,7 +25,7 @@ const DisplayTodo = ({
     <div>
       <div className="flex bg-white border border-gray-200 shadow-sm rounded-xl p-4 md:p-5 dark:bg-zinc-900 dark:border-gray-700 dark:text-white">
         <h1 className="text-white font-semibold text-xl w-3/4 text-left">
-          {task}
+          {selectedTask.task} {/* Render selected task name */}
         </h1>
 
         <Link to={`/usertodos/${todoID}`}>
@@ -55,7 +50,10 @@ const DisplayTodo = ({
           Delete
         </button>
       </div>
-      {isSelected && <DetailedTodo task={task} taskDetails={taskDetails}></DetailedTodo>}
+      <DetailedTodo
+        task={selectedTask.task} 
+        taskDetails={selectedTask.taskDetails} 
+      />
     </div>
   );
 };

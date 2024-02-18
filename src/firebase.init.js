@@ -1,7 +1,5 @@
 import { initializeApp } from "firebase/app";
-import { getFirestore } from "firebase/firestore";
-// import {getDatabase} from 'firebase/database'
-import { getAuth } from "firebase/auth";
+import { browserSessionPersistence, getAuth, setPersistence } from "firebase/auth";
 
 const firebaseConfig = {
   apiKey: "AIzaSyAvfOqPDxLKlv4IbhuNJQRsmzQ_KmlE8Ek",
@@ -13,8 +11,15 @@ const firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
-const db = getFirestore(app); // Initialize Firestore
 
 const auth = getAuth(app);
 
-export { auth, db };
+setPersistence(auth, browserSessionPersistence)
+  .then(() => {
+    console.log("Persistent authentication enabled");
+  })
+  .catch((error) => {
+    console.error("Error enabling persistent authentication:", error);
+  });
+
+export { auth};

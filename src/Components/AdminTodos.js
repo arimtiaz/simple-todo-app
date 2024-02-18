@@ -37,9 +37,11 @@ const AdminTodos = ({ setIsAdmin, isAdmin }) => {
       task: task,
       taskDetails: taskDetails,
     };
+    
     setAllTasks((prevTasks) => [...prevTasks, newTask]);
     setTask("");
     setTaskDetails("");
+
 
     const updatedTasks = [...allTasks, newTask];
     window.localStorage.setItem("allTasks", JSON.stringify(updatedTasks));
